@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:apidemo/modelclass.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,17 +46,18 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: ListView.separated(
         itemBuilder: (context, index) => Card(
-          child: ListTile(
-            trailing: Image(image: NetworkImage(allData[index].gif.toString())),
-            title: Text(allData[index].title.toString()),
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image(
-                image: NetworkImage(allData[index].thumbnail.toString()),
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-              ),
+          child: Container(
+            height: 180,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                CachedNetworkImage(
+                  imageUrl: allData[index].thumbnail.toString(),
+                  placeholder: (context, url) => Image.network(
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ],
             ),
           ),
         ),
